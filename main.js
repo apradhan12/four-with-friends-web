@@ -1,31 +1,3 @@
-const BOARD_WIDTH = 7;
-const BOARD_HEIGHT = 6;
-
-const TOKEN_WIDTH_PX = 100;
-const RADIUS_RATIO = 0.9;
-const RADIUS = RADIUS_RATIO * TOKEN_WIDTH_PX / 2;
-
-function convertCoords(row, col) {
-    return [TOKEN_WIDTH_PX * (col + 0.5), TOKEN_WIDTH_PX * (row + 0.5)];
-}
-
-function drawBoard(board) {
-    const canvas = document.getElementById('canvas');
-    const ctx = canvas.getContext('2d');
-    for (let col = 0; col < BOARD_WIDTH; col++) {
-        for (let row = 0; row < BOARD_HEIGHT; row++) {
-            const center = convertCoords(row, col);
-            ctx.beginPath();
-            ctx.arc(center[0], center[1], RADIUS, 0, 2 * Math.PI, false);
-            ctx.fillStyle = board[col][row];
-            ctx.fill();
-            ctx.lineWidth = 1;
-            ctx.strokeStyle = '#000000';
-            ctx.stroke();
-        }
-    }
-}
-
 function connect() {
     let socket = new WebSocket("wss://javascript.info");
 
@@ -56,5 +28,23 @@ function main() {
     const board = GameModel.generateBoard();
     board[0][5] = 'red';
     drawBoard(board);
+}
+
+class Controller {
+
+    constructor() {
+        this.model = new StateModel();
+        this.view = new View(this.model);
+    }
+
+    // Server messages
+
+    handleGameStarted(data) {
+        this.model.state = STATES.inGame;
+        this.model.opponentUsername = data.o_name;
+        this.model.gameModel = new GameModel(data.color, data.your_move);
+        this.view.updateGameState();
+    }
+
 }
 
