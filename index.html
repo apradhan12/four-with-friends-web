@@ -34,7 +34,7 @@
 <!--                    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">-->
 <!--                    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>-->
 <!--                </div>-->
-                <div class="form-group hidden" id="lobbyDiv">
+                <div class="form-group" id="lobbyDiv">
                     <button type="button" class="btn btn-primary" id="createPrivate">Create Private Game</button>
                     <button type="button" class="btn btn-primary" id="joinPrivate">Join Private Game</button>
                     <button type="button" class="btn btn-primary" id="joinOpen">Join Open Game</button>
@@ -47,10 +47,19 @@
                     <label for="gameCode">Game Code</label>
                     <input type="text" class="form-control" id="gameCode" />
                 </div>
+                <div class="form-group hidden" id="submitUserInfoDiv">
+                    <button type="button" class="btn btn-primary" id="submitUserInfo">Submit</button>
+                </div>
                 <div class="form-group form-inline hidden" id="moveColumnDiv">
                     <label for="moveColumn" class="mr-2">Move Column</label>
                     <input type="number" class="form-control mr-2" id="moveColumn" />
                     <button type="button" class="btn btn-primary" id="sendMove">Send Move</button>
+                </div>
+                <div class="form-group hidden" id="rematchDiv">
+                    <button type="button" class="btn btn-primary" id="rematch">Rematch</button>
+                </div>
+                <div class="form-group hidden" id="exitLobbyDiv">
+                    <button type="button" class="btn btn-primary" id="exitLobby">Exit to Lobby</button>
                 </div>
             </form>
         </div>

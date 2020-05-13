@@ -36,6 +36,14 @@ class View {
             }
         }
     }
+
+    showUsernameInput() {
+        $("#usernameDiv").removeClass("hidden");
+    }
+
+    showSubmitUserInfo() {
+        $("#submitUserInfoDiv").removeClass("hidden");
+    }
 }
 
 function convertCoords(row, col) {
