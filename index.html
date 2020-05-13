@@ -7,12 +7,54 @@
             integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs="
             crossorigin="anonymous">
     </script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="model.js"></script>
     <script src="main.js"></script>
+    <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body onload="main()">
-
-<canvas id="canvas" width="1000" height="800" style="border-style: solid;">
-</canvas>
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <canvas id="canvas" width="1000" height="800" style="border-style: solid;">
+            </canvas>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div id="status"></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <form id="data">
+<!--                <div class="form-group">-->
+<!--                    <label for="exampleInputEmail1">Email address</label>-->
+<!--                    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">-->
+<!--                    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>-->
+<!--                </div>-->
+                <div class="form-group hidden" id="lobbyDiv">
+                    <button type="button" class="btn btn-primary" id="createPrivate">Create Private Game</button>
+                    <button type="button" class="btn btn-primary" id="joinPrivate">Join Private Game</button>
+                    <button type="button" class="btn btn-primary" id="joinOpen">Join Open Game</button>
+                </div>
+                <div class="form-group hidden" id="usernameDiv">
+                    <label for="username">Username</label>
+                    <input type="text" class="form-control" id="username" />
+                </div>
+                <div class="form-group hidden" id="gameCodeDiv">
+                    <label for="gameCode">Game Code</label>
+                    <input type="text" class="form-control" id="gameCode" />
+                </div>
+                <div class="form-group form-inline hidden" id="moveColumnDiv">
+                    <label for="moveColumn" class="mr-2">Move Column</label>
+                    <input type="number" class="form-control mr-2" id="moveColumn" />
+                    <button type="button" class="btn btn-primary" id="sendMove">Send Move</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 </body>
 </html>
