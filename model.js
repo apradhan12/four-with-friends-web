@@ -4,6 +4,7 @@ const BOARD_HEIGHT = 6;
 const DOM_ID_MAP = {
     canvas: "#canvasDiv",
     status: "#statusDiv",
+    gameCodeDisplay: "#gameCodeDisplayDiv",
     gameInfo: "#gameInfoDiv",
     lobbyButtons: "#lobbyDiv",
     username: "#usernameDiv",
@@ -19,13 +20,50 @@ const STATES = {
         visible: [
             DOM_ID_MAP.status,
             DOM_ID_MAP.lobbyButtons
-        ]
+        ],
+        states: {
+            selecting: {
+                visible: [],
+                status: "Click one of the buttons to start playing."
+            },
+            creatingPrivate: {
+                visible: [
+                    DOM_ID_MAP.username
+                ],
+                status: "Create a username."
+            },
+            joiningPrivate: {
+                visible: [
+                    DOM_ID_MAP.username,
+                    DOM_ID_MAP.gameCode
+                ],
+                status: "Create a username and input the code of the game you wish to join."
+            },
+            joiningOpen: {
+                visible: [
+                    DOM_ID_MAP.username
+                ],
+                status: "Create a username."
+            }
+        }
     },
     waiting: {
         visible: [
             DOM_ID_MAP.status,
             DOM_ID_MAP.exitToLobby
-        ]
+        ],
+        states: {
+            waitingOpponentOpen: {
+                visible: [],
+                status: "Waiting for an opponent..."
+            },
+            waitingOpponentPrivate: {
+                visible: [
+                    DOM_ID_MAP.gameCodeDisplay
+                ],
+                status: "Waiting for an opponent..."
+            }
+        }
     },
     inGame: {
         visible: [
@@ -34,7 +72,19 @@ const STATES = {
             DOM_ID_MAP.gameInfo,
             DOM_ID_MAP.moveColumn,
             DOM_ID_MAP.exitToLobby
-        ]
+        ],
+        states: {
+            yourMove: {
+                visible: [
+                    DOM_ID_MAP.moveColumn
+                ],
+                status: "It's your turn."
+            },
+            opponentMove: {
+                visible: [],
+                status: "It's the other player's turn."
+            }
+        }
     },
     postGame: {
         visible: [
