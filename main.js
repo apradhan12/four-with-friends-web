@@ -39,7 +39,6 @@ class Controller {
 
     // Client UI
     handleCreatePrivateGame() {
-        console.log("calling view");
         this.view.showUsernameInput();
         this.view.showSubmitUserInfo();
     }

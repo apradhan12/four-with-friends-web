@@ -4,10 +4,16 @@ const RADIUS = RADIUS_RATIO * TOKEN_WIDTH_PX / 2;
 
 const GAME_STATUS_TEXT = {
     [GAME_STATES.playerTurn]: "It's your turn",
-    [GAME_STATES.opponentTurn]: "It's the other player's turn",
-    [GAME_STATES.win]: "You won!",
-    [GAME_STATES.draw]: "It's a tie.",
-    [GAME_STATES.loss]: "You lost."
+    [GAME_STATES.opponentTurn]: "It's the other player's turn"
+}
+
+const GAME_RESULT_TEXT = {
+    [GAME_RESULTS.win]: "You won!",
+    [GAME_RESULTS.draw]: "It's a tie.",
+    [GAME_RESULTS.loss]: "You lost.",
+    [GAME_RESULTS.opponentDisconnected]: "The opponent has disconnected.",
+    [GAME_RESULTS.opponentRequestedRematch]: "The opponent has requested a rematch.",
+    [GAME_RESULTS.playerRequestedRematch]: "You have requested a rematch."
 }
 
 
@@ -17,6 +23,15 @@ class View {
         this.canvas = document.getElementById('canvas');
         this.ctx = this.canvas.getContext('2d');
         this.model = model;
+        this.domElements = this.getDOMElementsMap();
+    }
+
+    getDOMElementsMap() {
+        const domElements = {};
+        for (const [key, value] of Object.entries(DOM_ID_MAP)) {
+            domElements[key] = $(value);
+        }
+        return domElements;
     }
 
     updateGameState() {
@@ -38,11 +53,11 @@ class View {
     }
 
     showUsernameInput() {
-        $("#usernameDiv").removeClass("hidden");
+        $("#usernameDiv").show();
     }
 
     showSubmitUserInfo() {
-        $("#submitUserInfoDiv").removeClass("hidden");
+        $("#submitUserInfoDiv").show();
     }
 }
 

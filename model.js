@@ -1,21 +1,64 @@
 const BOARD_WIDTH = 7;
 const BOARD_HEIGHT = 6;
 
+const DOM_ID_MAP = {
+    canvas: "#canvasDiv",
+    status: "#statusDiv",
+    gameInfo: "#gameInfoDiv",
+    lobbyButtons: "#lobbyDiv",
+    username: "#usernameDiv",
+    gameCode: "#gameCodeDiv",
+    submitLobby: "#submitUserInfoDiv",
+    moveColumn: "#moveColumnDiv",
+    rematch: "#rematchDiv",
+    exitToLobby: "#exitLobbyDiv"
+};
+
 const STATES = {
-    inLobby: "inLobby",
-    waitingJoin: "waitingJoin",
-    waitingOpponent: "waitingOpponent",
-    inGame: "inGame",
-    opponentDisconnected: "opponentDisconnected"
+    inLobby: {
+        visible: [
+            DOM_ID_MAP.status,
+            DOM_ID_MAP.lobbyButtons
+        ]
+    },
+    waiting: {
+        visible: [
+            DOM_ID_MAP.status,
+            DOM_ID_MAP.exitToLobby
+        ]
+    },
+    inGame: {
+        visible: [
+            DOM_ID_MAP.canvas,
+            DOM_ID_MAP.status,
+            DOM_ID_MAP.gameInfo,
+            DOM_ID_MAP.moveColumn,
+            DOM_ID_MAP.exitToLobby
+        ]
+    },
+    postGame: {
+        visible: [
+            DOM_ID_MAP.canvas,
+            DOM_ID_MAP.status,
+            DOM_ID_MAP.gameInfo,
+            DOM_ID_MAP.exitToLobby
+        ]
+    }
 };
 
 const GAME_STATES = {
     playerTurn: "playerTurn",
-    opponentTurn: "opponentTurn",
+    opponentTurn: "opponentTurn"
+};
+
+const GAME_RESULTS = {
     win: "win",
     loss: "loss",
-    draw: "draw"
-};
+    draw: "draw",
+    opponentDisconnected: "opponentDisconnected",
+    opponentRequestedRematch: "opponentRequestedRematch",
+    playerRequestedRematch: "playerRequestedRematch"
+}
 
 class StateModel {
     constructor() {
