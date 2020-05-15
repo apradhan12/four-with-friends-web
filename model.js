@@ -92,7 +92,41 @@ const STATES = {
             DOM_ID_MAP.status,
             DOM_ID_MAP.gameInfo,
             DOM_ID_MAP.exitToLobby
-        ]
+        ],
+        states: {
+            opponentDisconnected: {
+                visible: [],
+                status: "The opponent has disconnected."
+            },
+            win: {
+                visible: [
+                    DOM_ID_MAP.rematch
+                ],
+                status: "You won!"
+            },
+            loss: {
+                visible: [
+                    DOM_ID_MAP.rematch
+                ],
+                status: "You lost."
+            },
+            draw: {
+                visible: [
+                    DOM_ID_MAP.rematch
+                ],
+                status: "It's a draw."
+            },
+            opponentRequestedRematch: {
+                visible: [
+                    DOM_ID_MAP.rematch
+                ],
+                status: "The opponent has requested a rematch."
+            },
+            playerRequestedRematch: {
+                visible: [],
+                status: "Waiting for the opponent's response..."
+            }
+        }
     }
 };
 
