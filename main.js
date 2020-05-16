@@ -38,6 +38,16 @@ class Controller {
         $("#joinOpen").on("click", this.generateEventHandler(this.joinOpenGame));
         $("#submitUserInfo").on("click", this.generateEventHandler(this.submitLobby));
         $("#exitLobby").on("click", this.generateEventHandler(this.exitToLobby));
+
+        this.socket.onmessage = (function(event) {
+            const data = JSON.parse(event.data);
+            const command = data.cmd;
+            switch (command) {
+                case "no_such_game":
+                    this.generateEventHandler(this.noSuchGame);
+                    break;
+            }
+        }).bind(this);
     }
 
     updateVisible() {
@@ -72,7 +82,9 @@ class Controller {
     }
 
     submitLobby() {
-        this.model.state = this.model.state.submitLobby();
+        const [state, message] = this.model.state.submitLobby();
+        this.model.state = state;
+        this.socket.send(JSON.stringify(message));
     }
 
     exitToLobby() {
@@ -80,7 +92,12 @@ class Controller {
     }
 
     // Server messages
-    handleGameStarted(data) {
+    noSuchGame() {
+        this.model.state = new JoiningPrivate();
+        this.model.state.status = "Invalid game code";
+    }
+
+    gameStarted(data) {
         this.model.state = new InGame();
         this.model.opponentUsername = data.o_name;
         this.model.gameModel = new GameModel(data.color, data.your_move);

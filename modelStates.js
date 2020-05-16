@@ -36,7 +36,10 @@ class CreatingPrivate extends InLobby {
     }
 
     submitLobby() {
-        return new WaitingOpponentPrivate();
+        return [new WaitingOpponentPrivate(), {
+            "cmd": "join_private",
+            "username": $("#username").val()
+        }];
     }
 }
 
@@ -48,7 +51,11 @@ class JoiningPrivate extends InLobby {
     }
 
     submitLobby() {
-        return new WaitingJoinPrivate();
+        return [new WaitingJoinPrivate(), {
+            "cmd": "join_private",
+            "username": $("#username").val(),
+            "code": $("#gameCode").val()
+        }];
     }
 }
 
@@ -60,7 +67,10 @@ class JoiningOpen extends InLobby {
     }
 
     submitLobby() {
-        return new WaitingOpponentOpen();
+        return [new WaitingOpponentOpen(), {
+            "cmd": "join_open",
+            "username": $("#username").val()
+        }];
     }
 }
 
