@@ -37,7 +37,7 @@ class CreatingPrivate extends InLobby {
 
     submitLobby() {
         return [new WaitingOpponentPrivate(), {
-            "cmd": "join_private",
+            "cmd": "create_private",
             "username": $("#username").val()
         }];
     }
