@@ -1,6 +1,6 @@
 class InLobby {
     constructor() {
-        this.visible = ['#statusDiv', '#lobbyDiv'];
+        this.visible = [DOM_ID_MAP.status, DOM_ID_MAP.lobbyButtons];
     }
     getVisible() {
         return this.visible;
@@ -21,7 +21,7 @@ class Selecting extends InLobby {
 class CreatingPrivate extends InLobby {
     constructor() {
         super();
-        this.visible = ['#usernameDiv'];
+        this.visible = [DOM_ID_MAP.username];
         this.status = "Create a username.";
     }
     getVisible() {
@@ -32,7 +32,7 @@ class CreatingPrivate extends InLobby {
 class JoiningPrivate extends InLobby {
     constructor() {
         super();
-        this.visible = ['#usernameDiv', '#gameCodeDiv'];
+        this.visible = [DOM_ID_MAP.username, DOM_ID_MAP.gameCode];
         this.status = "Create a username and input the code of the game you wish to join.";
     }
     getVisible() {
@@ -43,7 +43,7 @@ class JoiningPrivate extends InLobby {
 class JoiningOpen extends InLobby {
     constructor() {
         super();
-        this.visible = ['#usernameDiv'];
+        this.visible = [DOM_ID_MAP.username];
         this.status = "Create a username.";
     }
     getVisible() {
@@ -53,7 +53,7 @@ class JoiningOpen extends InLobby {
 
 class Waiting {
     constructor() {
-        this.visible = ['#statusDiv', '#exitLobbyDiv'];
+        this.visible = [DOM_ID_MAP.status, DOM_ID_MAP.exitToLobby];
     }
     getVisible() {
         return this.visible;
@@ -74,7 +74,7 @@ class WaitingOpponentOpen extends Waiting {
 class WaitingOpponentPrivate extends Waiting {
     constructor() {
         super();
-        this.visible = ['#gameCodeDisplayDiv'];
+        this.visible = [DOM_ID_MAP.gameCodeDisplay];
         this.status = "Waiting for an opponent...";
     }
     getVisible() {
@@ -84,7 +84,7 @@ class WaitingOpponentPrivate extends Waiting {
 
 class InGame {
     constructor() {
-        this.visible = ['#canvasDiv', '#statusDiv', '#gameInfoDiv', '#moveColumnDiv', '#exitLobbyDiv'];
+        this.visible = [DOM_ID_MAP.canvas, DOM_ID_MAP.status, DOM_ID_MAP.gameInfo, DOM_ID_MAP.moveColumn, DOM_ID_MAP.exitToLobby];
     }
     getVisible() {
         return this.visible;
@@ -94,7 +94,7 @@ class InGame {
 class YourMove extends InGame {
     constructor() {
         super();
-        this.visible = ['#moveColumnDiv'];
+        this.visible = [DOM_ID_MAP.moveColumn];
         this.status = "It's your turn.";
     }
     getVisible() {
@@ -115,7 +115,7 @@ class OpponentMove extends InGame {
 
 class PostGame {
     constructor() {
-        this.visible = ['#canvasDiv', '#statusDiv', '#gameInfoDiv', '#exitLobbyDiv'];
+        this.visible = [DOM_ID_MAP.canvas, DOM_ID_MAP.status, DOM_ID_MAP.gameInfo, DOM_ID_MAP.exitToLobby];
     }
     getVisible() {
         return this.visible;
@@ -136,7 +136,7 @@ class OpponentDisconnected extends PostGame {
 class Win extends PostGame {
     constructor() {
         super();
-        this.visible = ['#rematchDiv'];
+        this.visible = [DOM_ID_MAP.rematch];
         this.status = "You won!";
     }
     getVisible() {
@@ -147,7 +147,7 @@ class Win extends PostGame {
 class Loss extends PostGame {
     constructor() {
         super();
-        this.visible = ['#rematchDiv'];
+        this.visible = [DOM_ID_MAP.rematch];
         this.status = "You lost.";
     }
     getVisible() {
@@ -158,7 +158,7 @@ class Loss extends PostGame {
 class Draw extends PostGame {
     constructor() {
         super();
-        this.visible = ['#rematchDiv'];
+        this.visible = [DOM_ID_MAP.rematch];
         this.status = "It's a draw.";
     }
     getVisible() {
@@ -169,7 +169,7 @@ class Draw extends PostGame {
 class OpponentRequestedRematch extends PostGame {
     constructor() {
         super();
-        this.visible = ['#rematchDiv'];
+        this.visible = [DOM_ID_MAP.rematch];
         this.status = "The opponent has requested a rematch.";
     }
     getVisible() {
