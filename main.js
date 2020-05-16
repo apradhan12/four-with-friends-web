@@ -24,18 +24,6 @@ function connect() {
     };
 }
 
-function createPrivateGame(model, view, controller) {
-    model.state = new CreatingPrivate();
-}
-
-function joinPrivateGame(model, view, controller) {
-    model.state = new JoiningPrivate();
-}
-
-function joinOpenGame(model, view, controller) {
-    model.state = new JoiningOpen();
-}
-
 class Controller {
 
     constructor() {
@@ -45,10 +33,11 @@ class Controller {
     }
 
     bindHandlers() {
-        $("#createPrivate").on("click", this.generateEventHandler(createPrivateGame));
-        $("#joinPrivate").on("click", this.generateEventHandler(joinPrivateGame));
-        $("#joinOpen").on("click", this.generateEventHandler(joinOpenGame));
-        $("#submitUserInfo").on("click", $.proxy(this.handleSubmitUserInfo, this));
+        $("#createPrivate").on("click", this.generateEventHandler(this.createPrivateGame));
+        $("#joinPrivate").on("click", this.generateEventHandler(this.joinPrivateGame));
+        $("#joinOpen").on("click", this.generateEventHandler(this.joinOpenGame));
+        $("#submitUserInfo").on("click", this.generateEventHandler(this.submitLobby));
+        $("#exitLobby").on("click", this.generateEventHandler(this.exitToLobby));
     }
 
     updateVisible() {
@@ -64,23 +53,33 @@ class Controller {
 
     generateEventHandler(handler) {
         return (function() {
-            handler(this.model, this.view, this);
+            handler.bind(this)();
             this.updateVisible();
         }).bind(this);
     }
 
-    handleSubmitUserInfo() {
-        // TODO: implement actual method
-        const data = {
-            "o_name": "rickastley",
-            "your_move": false,
-        };
-        this.handleGameStarted(data);
+    // UI events
+    createPrivateGame() {
+        this.model.state = new CreatingPrivate();
     }
 
+    joinPrivateGame() {
+        this.model.state = new JoiningPrivate();
+    }
+
+    joinOpenGame() {
+        this.model.state = new JoiningOpen();
+    }
+
+    submitLobby() {
+        this.model.state = this.model.state.submitLobby();
+    }
+
+    exitToLobby() {
+        this.model.state = new Selecting();
+    }
 
     // Server messages
-
     handleGameStarted(data) {
         this.model.state = new InGame();
         this.model.opponentUsername = data.o_name;

@@ -24,7 +24,6 @@ class InLobby extends State {
 class Selecting extends InLobby {
     constructor() {
         super();
-        this.visible = this.visible.concat([]);
         this.status = "Click one of the buttons to start playing.";
     }
 }
@@ -35,6 +34,10 @@ class CreatingPrivate extends InLobby {
         this.visible = this.visible.concat([DOM_ID_MAP.username, DOM_ID_MAP.submitLobby]);
         this.status = "Create a username.";
     }
+
+    submitLobby() {
+        return new WaitingOpponentPrivate();
+    }
 }
 
 class JoiningPrivate extends InLobby {
@@ -43,6 +46,10 @@ class JoiningPrivate extends InLobby {
         this.visible = this.visible.concat([DOM_ID_MAP.username, DOM_ID_MAP.gameCode, DOM_ID_MAP.submitLobby]);
         this.status = "Create a username and input the code of the game you wish to join.";
     }
+
+    submitLobby() {
+        return new WaitingJoinPrivate();
+    }
 }
 
 class JoiningOpen extends InLobby {
@@ -50,6 +57,10 @@ class JoiningOpen extends InLobby {
         super();
         this.visible = this.visible.concat([DOM_ID_MAP.username, DOM_ID_MAP.submitLobby]);
         this.status = "Create a username.";
+    }
+
+    submitLobby() {
+        return new WaitingOpponentOpen();
     }
 }
 
@@ -63,7 +74,6 @@ class Waiting extends State {
 class WaitingOpponentOpen extends Waiting {
     constructor() {
         super();
-        this.visible = this.visible.concat([]);
         this.status = "Waiting for an opponent...";
     }
 }
@@ -73,6 +83,13 @@ class WaitingOpponentPrivate extends Waiting {
         super();
         this.visible = this.visible.concat([DOM_ID_MAP.gameCodeDisplay]);
         this.status = "Waiting for an opponent...";
+    }
+}
+
+class WaitingJoinPrivate extends Waiting {
+    constructor() {
+        super();
+        this.status = "Joining...";
     }
 }
 
@@ -94,7 +111,6 @@ class YourMove extends InGame {
 class OpponentMove extends InGame {
     constructor() {
         super();
-        this.visible = this.visible.concat([]);
         this.status = "It's the other player's turn.";
     }
 }
@@ -109,7 +125,6 @@ class PostGame extends State {
 class OpponentDisconnected extends PostGame {
     constructor() {
         super();
-        this.visible = this.visible.concat([]);
         this.status = "The opponent has disconnected.";
     }
 }
@@ -149,7 +164,6 @@ class OpponentRequestedRematch extends PostGame {
 class PlayerRequestedRematch extends PostGame {
     constructor() {
         super();
-        this.visible = this.visible.concat([]);
         this.status = "Waiting for the opponent's response...";
     }
 }
