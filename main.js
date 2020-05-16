@@ -21,7 +21,7 @@ class Controller {
             const command = data.cmd;
             switch (command) {
                 case "no_such_game":
-                    this.generateEventHandler(this.noSuchGame);
+                    this.generateEventHandler(this.noSuchGame)();
                     break;
             }
             console.log(`[message] Data received from server: ${event.data}`);
@@ -85,6 +85,8 @@ class Controller {
 
     exitToLobby() {
         this.model.state = new Selecting();
+        // TODO: only send this message if actually waiting
+        // this.socket.send(JSON.stringify());
     }
 
     // Server messages
