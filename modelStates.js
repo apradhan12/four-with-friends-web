@@ -1,3 +1,17 @@
+const DOM_ID_MAP = {
+    canvas: "#canvasDiv",
+    status: "#statusDiv",
+    gameCodeDisplay: "#gameCodeDisplayDiv",
+    gameInfo: "#gameInfoDiv",
+    lobbyButtons: "#lobbyDiv",
+    username: "#usernameDiv",
+    gameCode: "#gameCodeDiv",
+    submitLobby: "#submitUserInfoDiv",
+    moveColumn: "#moveColumnDiv",
+    rematch: "#rematchDiv",
+    exitToLobby: "#exitLobbyDiv"
+};
+
 class State {}
 
 class InLobby extends State {

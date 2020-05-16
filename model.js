@@ -1,20 +1,6 @@
 const BOARD_WIDTH = 7;
 const BOARD_HEIGHT = 6;
 
-const DOM_ID_MAP = {
-    canvas: "#canvasDiv",
-    status: "#statusDiv",
-    gameCodeDisplay: "#gameCodeDisplayDiv",
-    gameInfo: "#gameInfoDiv",
-    lobbyButtons: "#lobbyDiv",
-    username: "#usernameDiv",
-    gameCode: "#gameCodeDiv",
-    submitLobby: "#submitUserInfoDiv",
-    moveColumn: "#moveColumnDiv",
-    rematch: "#rematchDiv",
-    exitToLobby: "#exitLobbyDiv"
-};
-
 const GAME_STATES = {
     playerTurn: "playerTurn",
     opponentTurn: "opponentTurn"
