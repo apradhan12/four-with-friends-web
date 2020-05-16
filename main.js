@@ -1,35 +1,12 @@
-function connect() {
-    let socket = new WebSocket("wss://javascript.info");
-
-    socket.onopen = function(e) {
-        alert("[open] Connection established");
-        alert("Sending to server");
-        socket.send(JSON.stringify({"hello": "world"}));
-    };
-
-    socket.onmessage = function(event) {
-        alert(`[message] Data received from server: ${event.data}`);
-    };
-
-    socket.onclose = function(event) {
-        if (event.wasClean) {
-            alert(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`);
-        } else {
-            alert('[close] Connection died');
-        }
-    };
-
-    socket.onerror = function(error) {
-        alert(`[error] ${error.message}`);
-    };
-}
+const HOST = "localhost:8080"
+const ENDPOINT = "/ws"
 
 class Controller {
 
     constructor() {
         this.model = new StateModel();
         this.view = new View(this.model);
-        this.socket = new WebSocket("wss://javascript.info");
+        this.socket = new WebSocket(`ws://${HOST}${ENDPOINT}`);
     }
 
     bindHandlers() {
@@ -47,7 +24,26 @@ class Controller {
                     this.generateEventHandler(this.noSuchGame);
                     break;
             }
+            console.log(`[message] Data received from server: ${event.data}`);
         }).bind(this);
+
+        this.socket.onopen = function(e) {
+            console.log("[open] Connection established");
+        }.bind(this);
+
+        this.socket.onclose = function(event) {
+            console.log(`Closing event: ${JSON.stringify(event)}`);
+            window.myCloseEvent = event;
+            if (event.wasClean) {
+                console.log(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`);
+            } else {
+                console.log('[close] Connection died');
+            }
+        };
+
+        this.socket.onerror = function(error) {
+            console.log(`[error] ${error.message}`);
+        };
     }
 
     updateVisible() {
