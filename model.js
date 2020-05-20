@@ -47,11 +47,18 @@ class GameModel {
         if (column < 0 || column >= BOARD_WIDTH) {
             return false;
         }
-        const firstEmptyRow = this.board[column].find(cell => cell === "white");
-        if (firstEmptyRow === undefined) {
+        const firstOccupiedRowEntry = Array.from(this.board[column].entries()).find(cellEntry => cellEntry[1] !== "white");
+        // console.log(`first empty row is '${firstEmptyRow}'`);
+        // console.log(`I just changed the board at ${column} ${firstEmptyRow} to ${playerColor}`);
+        if (firstOccupiedRowEntry === undefined) { // the column is empty
+            this.board[column][BOARD_HEIGHT - 1] = playerColor;
+            return true;
+        }
+        if (firstOccupiedRowEntry[0] === 0) { // the column is full
             return false;
         }
-        this.board[column][firstEmptyRow] = playerColor;
+        // the token landed somewhere in the middle of the column
+        this.board[column][firstOccupiedRowEntry[0] - 1] = playerColor;
         return true;
     }
 }

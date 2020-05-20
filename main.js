@@ -19,7 +19,10 @@ class Controller {
         $("#rematch").on("click", this.generateEventHandler(this.rematch));
 
         this.socket.onmessage = (function(event) {
+            console.log(`here is the event: ${JSON.stringify(event)}`);
+            window.mostRecentReceived = event;
             const data = JSON.parse(event.data);
+            console.log(`here is the data: ${JSON.stringify(data)}`);
             const command = data.cmd;
             switch (command) {
                 case "no_such_game":
@@ -81,8 +84,8 @@ class Controller {
     }
 
     generateEventHandler(handler) {
-        return (function() {
-            handler.bind(this)();
+        return (function(...args) {
+            handler.bind(this)(...args);
             this.updateVisible();
         }).bind(this);
     }
@@ -116,12 +119,15 @@ class Controller {
 
     move() {
         const column = $("#moveColumn").val();
+        console.log(`you tried to move in column ${column}`);
         const isLegal = this.model.gameModel.addPlayerToken(column, this.model.gameModel.playerColor);
         if (isLegal) {
+            console.log(`it's legal`);
             this.socket.send(JSON.stringify({
                 "cmd": "move",
                 "column": parseInt(column)
             }));
+            this.view.updateGameState();
             this.model.state = new OpponentMove();
         }
     }
@@ -140,6 +146,8 @@ class Controller {
     }
 
     gameStarted(data) {
+        console.log(`here is the data I got: ${JSON.stringify(data)}`);
+        console.log(`is it your move? ${data.your_move}`);
         this.model.state = data.your_move ? new YourMove() : new OpponentMove();
         this.model.opponentUsername = data.o_name;
         this.model.gameModel = new GameModel(data.color, data.your_move);
