@@ -15,6 +15,8 @@ class Controller {
         $("#joinOpen").on("click", this.generateEventHandler(this.joinOpenGame));
         $("#submitUserInfo").on("click", this.generateEventHandler(this.submitLobby));
         $("#exitLobby").on("click", this.generateEventHandler(this.exitToLobby));
+        $("#sendMove").on("click", this.generateEventHandler(this.move));
+        $("#rematch").on("click", this.generateEventHandler(this.rematch));
 
         this.socket.onmessage = (function(event) {
             const data = JSON.parse(event.data);
@@ -22,6 +24,27 @@ class Controller {
             switch (command) {
                 case "no_such_game":
                     this.generateEventHandler(this.noSuchGame)();
+                    break;
+                case "start":
+                    this.generateEventHandler(this.gameStarted)(data);
+                    break;
+                case "game_code":
+                    this.generateEventHandler(this.gameCode)(data);
+                    break;
+                case "o_move":
+                    this.generateEventHandler(this.opponentMoved)(data);
+                    break;
+                case "o_disconnect":
+                    this.generateEventHandler(this.opponentDisconnected)();
+                    break;
+                case "game_over":
+                    this.generateEventHandler(this.gameOver)(data);
+                    break;
+                case "o_rematch":
+                    this.generateEventHandler(this.opponentRequestedRematch)(data);
+                    break;
+                case "o_left": // TODO: remove this if deemed redundant
+                    this.generateEventHandler(this.opponentDisconnected)();
                     break;
             }
             console.log(`[message] Data received from server: ${event.data}`);
@@ -86,7 +109,28 @@ class Controller {
     exitToLobby() {
         this.model.state = new Selecting();
         // TODO: only send this message if actually waiting
-        // this.socket.send(JSON.stringify());
+        this.socket.send(JSON.stringify({
+            "cmd": "exit"
+        }));
+    }
+
+    move() {
+        const column = $("#moveColumn").val();
+        const isLegal = this.model.gameModel.addPlayerToken(column, this.model.gameModel.playerColor);
+        if (isLegal) {
+            this.socket.send(JSON.stringify({
+                "cmd": "move",
+                "column": parseInt(column)
+            }));
+            this.model.state = new OpponentMove();
+        }
+    }
+
+    rematch() {
+        this.socket.send(JSON.stringify({
+            "cmd": "rematch"
+        }));
+        this.model.state = this.model.state.rematch();
     }
 
     // Server messages
@@ -96,12 +140,45 @@ class Controller {
     }
 
     gameStarted(data) {
-        this.model.state = new InGame();
+        this.model.state = data.your_move ? new YourMove() : new OpponentMove();
         this.model.opponentUsername = data.o_name;
         this.model.gameModel = new GameModel(data.color, data.your_move);
         this.view.updateGameState();
     }
 
+    gameCode(data) {
+        // state will already be set
+        $("#gameCodeDisplay").text(data.code);
+    }
+
+    opponentMoved(data) {
+        this.model.state = new YourMove();
+        this.model.gameModel.isPlayerTurn = true;
+        this.model.gameModel.addPlayerToken(data.column, this.model.gameModel.opponentColor);
+    }
+
+    opponentDisconnected() {
+        this.model.state = new OpponentDisconnected();
+        this.model.gameModel = null;
+    }
+
+    gameOver(data) {
+        switch (data.result) {
+            case "win":
+                this.model.state = new Win();
+                break;
+            case "loss":
+                this.model.state = new Loss();
+                break;
+            case "draw":
+                this.model.state = new Draw();
+                break;
+        }
+    }
+
+    opponentRequestedRematch() {
+        this.model.state = new OpponentRequestedRematch();
+    }
 }
 
 function main() {

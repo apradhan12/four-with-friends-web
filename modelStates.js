@@ -139,26 +139,33 @@ class OpponentDisconnected extends PostGame {
     }
 }
 
-class Win extends PostGame {
+class StandardGameEnd extends PostGame {
     constructor() {
         super();
         this.visible = this.visible.concat([DOM_ID_MAP.rematch]);
+    }
+    rematch() {
+        return new PlayerRequestedRematch();
+    }
+}
+
+class Win extends StandardGameEnd {
+    constructor() {
+        super();
         this.status = "You won!";
     }
 }
 
-class Loss extends PostGame {
+class Loss extends StandardGameEnd {
     constructor() {
         super();
-        this.visible = this.visible.concat([DOM_ID_MAP.rematch]);
         this.status = "You lost.";
     }
 }
 
-class Draw extends PostGame {
+class Draw extends StandardGameEnd {
     constructor() {
         super();
-        this.visible = this.visible.concat([DOM_ID_MAP.rematch]);
         this.status = "It's a draw.";
     }
 }
@@ -168,6 +175,9 @@ class OpponentRequestedRematch extends PostGame {
         super();
         this.visible = this.visible.concat([DOM_ID_MAP.rematch]);
         this.status = "The opponent has requested a rematch.";
+    }
+    rematch() {
+        return new OpponentMove();
     }
 }
 
