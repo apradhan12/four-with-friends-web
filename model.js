@@ -44,9 +44,14 @@ class GameModel {
      * Returns whether adding the player token was successful.
      */
     addPlayerToken(column, playerColor) {
+        column = parseInt(column);
+        if (isNaN(column)) {
+            return false;
+        }
         if (column < 0 || column >= BOARD_WIDTH) {
             return false;
         }
+        console.log(`Current board: ${this.board}`);
         const firstOccupiedRowEntry = Array.from(this.board[column].entries()).find(cellEntry => cellEntry[1] !== "white");
         // console.log(`first empty row is '${firstEmptyRow}'`);
         // console.log(`I just changed the board at ${column} ${firstEmptyRow} to ${playerColor}`);

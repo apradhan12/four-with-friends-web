@@ -106,7 +106,7 @@ class WaitingJoinPrivate extends Waiting {
 class InGame extends State {
     constructor() {
         super();
-        this.visible = [DOM_ID_MAP.canvas, DOM_ID_MAP.status, DOM_ID_MAP.gameInfo, DOM_ID_MAP.moveColumn, DOM_ID_MAP.exitToLobby];
+        this.visible = [DOM_ID_MAP.canvas, DOM_ID_MAP.status, DOM_ID_MAP.gameInfo, DOM_ID_MAP.exitToLobby];
     }
 }
 

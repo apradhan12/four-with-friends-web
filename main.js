@@ -37,16 +37,13 @@ class Controller {
                 case "o_move":
                     this.generateEventHandler(this.opponentMoved)(data);
                     break;
-                case "o_disconnect":
-                    this.generateEventHandler(this.opponentDisconnected)();
-                    break;
                 case "game_over":
                     this.generateEventHandler(this.gameOver)(data);
                     break;
                 case "o_rematch":
                     this.generateEventHandler(this.opponentRequestedRematch)(data);
                     break;
-                case "o_left": // TODO: remove this if deemed redundant
+                case "o_left":
                     this.generateEventHandler(this.opponentDisconnected)();
                     break;
             }
@@ -75,9 +72,9 @@ class Controller {
     updateVisible() {
         for (const [, id] of Object.entries(DOM_ID_MAP)) {
             if (this.model.state.visible.includes(id)) {
-                $(id).show();
+                $(id).removeClass("hidden");
             } else {
-                $(id).hide();
+                $(id).addClass("hidden");
             }
         }
         $("#status").text(this.model.state.status);
@@ -111,6 +108,7 @@ class Controller {
 
     exitToLobby() {
         this.model.state = new Selecting();
+        this.model.gameModel = null;
         // TODO: only send this message if actually waiting
         this.socket.send(JSON.stringify({
             "cmd": "exit"
@@ -125,7 +123,7 @@ class Controller {
             console.log(`it's legal`);
             this.socket.send(JSON.stringify({
                 "cmd": "move",
-                "column": parseInt(column)
+                "col": parseInt(column)
             }));
             this.view.updateGameState();
             this.model.state = new OpponentMove();
@@ -163,6 +161,7 @@ class Controller {
         this.model.state = new YourMove();
         this.model.gameModel.isPlayerTurn = true;
         this.model.gameModel.addPlayerToken(data.column, this.model.gameModel.opponentColor);
+        this.view.updateGameState();
     }
 
     opponentDisconnected() {
