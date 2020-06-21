@@ -1,5 +1,6 @@
-const HOST = "localhost:8080"
-const ENDPOINT = "/ws"
+const HOST = "localhost:8080";
+const ENDPOINT = "/ws";
+const COLORS = ["red", "blue"];
 
 class Controller {
 
@@ -15,6 +16,7 @@ class Controller {
         $("#joinOpen").on("click", this.generateEventHandler(this.joinOpenGame));
         $("#submitUserInfo").on("click", this.generateEventHandler(this.submitLobby));
         $("#exitLobby").on("click", this.generateEventHandler(this.exitToLobby));
+        $("#stopWaiting").on("click", this.generateEventHandler(this.stopWaiting));
         $("#sendMove").on("click", this.generateEventHandler(this.move));
         $("#rematch").on("click", this.generateEventHandler(this.rematch));
 
@@ -22,16 +24,22 @@ class Controller {
             console.log(`here is the event: ${JSON.stringify(event)}`);
             window.mostRecentReceived = event;
             const data = JSON.parse(event.data);
-            console.log(`here is the data: ${JSON.stringify(data)}`);
+            console.log(`[message] Data from server: ${JSON.stringify(data)}`);
             const command = data.cmd;
             switch (command) {
+                case "invalid":
+                    this.generateEventHandler(this.invalid)();
+                    break;
+                case "error":
+                    this.generateEventHandler(this.error)();
+                    break;
                 case "no_such_game":
                     this.generateEventHandler(this.noSuchGame)();
                     break;
                 case "start":
                     this.generateEventHandler(this.gameStarted)(data);
                     break;
-                case "game_code":
+                case "private_code":
                     this.generateEventHandler(this.gameCode)(data);
                     break;
                 case "o_move":
@@ -43,11 +51,10 @@ class Controller {
                 case "o_rematch":
                     this.generateEventHandler(this.opponentRequestedRematch)(data);
                     break;
-                case "o_left":
+                case "game_closed":
                     this.generateEventHandler(this.opponentDisconnected)();
                     break;
             }
-            console.log(`[message] Data received from server: ${event.data}`);
         }).bind(this);
 
         this.socket.onopen = function(e) {
@@ -109,9 +116,15 @@ class Controller {
     exitToLobby() {
         this.model.state = new Selecting();
         this.model.gameModel = null;
-        // TODO: only send this message if actually waiting
         this.socket.send(JSON.stringify({
-            "cmd": "exit"
+            "cmd": "quit"
+        }));
+    }
+
+    stopWaiting() {
+        this.model.state = new Selecting();
+        this.socket.send(JSON.stringify({
+            "cmd": "stop_waiting"
         }));
     }
 
@@ -138,6 +151,16 @@ class Controller {
     }
 
     // Server messages
+    invalid(data) {
+        // description, state
+        console.log(`Invalid command: ${JSON.stringify(data)}`);
+    }
+
+    error(data) {
+        // description, state
+        console.log(`Internal server error: ${JSON.stringify(data)}`);
+    }
+
     noSuchGame() {
         this.model.state = new JoiningPrivate();
         this.model.state.status = "Invalid game code";
@@ -148,7 +171,13 @@ class Controller {
         console.log(`is it your move? ${data.your_move}`);
         this.model.state = data.your_move ? new YourMove() : new OpponentMove();
         this.model.opponentUsername = data.o_name;
-        this.model.gameModel = new GameModel(data.color, data.your_move);
+        let color;
+        if (data.your_move) {
+            color = COLORS[0];
+        } else {
+            color = COLORS[1];
+        }
+        this.model.gameModel = new GameModel(color, data.your_move);
         this.view.updateGameState();
     }
 

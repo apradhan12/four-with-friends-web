@@ -9,7 +9,8 @@ const DOM_ID_MAP = {
     submitLobby: "#submitUserInfoDiv",
     moveColumn: "#moveColumnDiv",
     rematch: "#rematchDiv",
-    exitToLobby: "#exitLobbyDiv"
+    exitToLobby: "#exitLobbyDiv",
+    stopWaiting: "#stopWaitingDiv"
 };
 
 class State {}
@@ -77,7 +78,7 @@ class JoiningOpen extends InLobby {
 class Waiting extends State {
     constructor() {
         super();
-        this.visible = [DOM_ID_MAP.status, DOM_ID_MAP.exitToLobby];
+        this.visible = [DOM_ID_MAP.status, DOM_ID_MAP.stopWaiting];
     }
 }
 
